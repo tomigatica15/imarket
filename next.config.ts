@@ -1,11 +1,14 @@
 import type { NextConfig } from "next";
 
+const disableImageOptimization = process.env.NEXT_IMAGE_UNOPTIMIZED === "true";
+
 const nextConfig: NextConfig = {
   // Standalone output for Docker builds (set NEXT_OUTPUT_STANDALONE=true in Dockerfile)
   // Skipped locally on Windows/OneDrive to avoid symlink permission errors
   output:
     process.env.NEXT_OUTPUT_STANDALONE === "true" ? "standalone" : undefined,
   images: {
+    unoptimized: disableImageOptimization,
     remotePatterns: [
       {
         protocol: "https",
