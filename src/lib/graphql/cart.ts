@@ -211,10 +211,14 @@ interface ApplyCouponMutationVars {
 // Hooks
 // ============================================================================
 
-export function useCartQuery() {
+export function useCartQuery(options?: { skip?: boolean }) {
   const { data, loading, error, refetch } = useQuery<CartQueryData>(
     CART_QUERY,
-    { fetchPolicy: "cache-first", nextFetchPolicy: "cache-first" },
+    {
+      fetchPolicy: "cache-first",
+      nextFetchPolicy: "cache-first",
+      skip: options?.skip ?? false,
+    },
   );
 
   return { cart: data?.cart, loading, error, refetch };

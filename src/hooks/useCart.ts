@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useCallback } from "react";
+import { useEffect, useMemo, useCallback } from "react";
 import {
   useCartQuery,
   useAddToCart,
@@ -12,7 +12,10 @@ import {
   type Cart as GraphQLCart,
   type CartItem as GraphQLCartItem,
 } from "@/lib/graphql/cart";
+import { useMockCart, clearMockCartStorage } from "./useMockCart";
 import type { Product } from "@/lib/graphql/server";
+
+const USE_MOCK = process.env.NEXT_PUBLIC_MOCK_PRODUCTS === "true";
 
 interface LocalCartItem {
   id: string;
@@ -72,8 +75,9 @@ function transformCart(gqlCart: GraphQLCart | null): LocalCart {
   };
 }
 
-export function useCart() {
-  const { cart: gqlCart, loading, error, refetch } = useCartQuery();
+// Internal hook: GraphQL-backed cart
+function useGQLCart(skip: boolean) {
+  const { cart: gqlCart, loading, error, refetch } = useCartQuery({ skip });
   const { addToCart: addToCartMutation, loading: addLoading } = useAddToCart();
   const { updateCartItem: updateCartItemMutation, loading: updateLoading } =
     useUpdateCartItem();
@@ -189,4 +193,21 @@ export function useCart() {
     couponLoading,
     refetch,
   };
+}
+
+// Public hook: delegates to mock (localStorage) or GraphQL based on build flag
+export function useCart() {
+  // Both hooks always called — required by rules of hooks
+  // GQL query is skipped in mock mode; mock cart logic is a noop in real mode
+  const mockCart = useMockCart();
+  const gqlCart = useGQLCart(USE_MOCK);
+
+  // When using real mode: clear any leftover mock cart from localStorage
+  useEffect(() => {
+    if (!USE_MOCK) {
+      clearMockCartStorage();
+    }
+  }, []);
+
+  return USE_MOCK ? mockCart : gqlCart;
 }
