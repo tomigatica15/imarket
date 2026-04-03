@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import { getProducts, getCategories } from "@/lib/graphql/server";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://imarket.ar";
+  const baseUrl = "https://imarket.tgdevs.net";
 
   const staticPages: MetadataRoute.Sitemap = [
     {

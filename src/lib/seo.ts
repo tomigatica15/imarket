@@ -4,8 +4,8 @@ export const siteConfig = {
   name: "iMarket",
   description:
     "Tu tienda online de tecnología y celulares. iPhones, MacBooks, AirPods, iPads, Apple Watch y accesorios con envío a todo Argentina.",
-  url: "https://imarket.ar",
-  ogImage: "https://imarket.ar/og-image.png",
+  url: "https://imarket.tgdevs.net",
+  ogImage: "https://imarket.tgdevs.net/og-image.png",
   creator: "@imarket_ar",
   keywords: [
     "celulares",
@@ -22,7 +22,7 @@ export const siteConfig = {
     "tienda online",
     "argentina",
   ],
-  authors: [{ name: "iMarket", url: "https://imarket.ar" }],
+  authors: [{ name: "iMarket", url: "https://imarket.tgdevs.net" }],
   locale: "es_AR",
   type: "website" as const,
 };
