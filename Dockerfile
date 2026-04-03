@@ -28,6 +28,13 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# Install sharp for Next.js image optimization
+# Done in runner to ensure correct platform-specific native binaries (linux-musl)
+# pnpm standalone tracing misses @img/* optional deps due to symlink store
+RUN cd /app && npm install --no-save sharp@0.33.5 2>/dev/null
+ENV NEXT_SHARP_PATH=/app/node_modules/sharp
+
 USER nextjs
 EXPOSE 3000
 ENV PORT=3000
